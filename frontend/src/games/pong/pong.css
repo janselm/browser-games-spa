@@ -1,0 +1,226 @@
+/* Pong Game Styles */
+
+#pong-root {
+  font-family: 'Courier New', monospace;
+}
+
+#canvas-container { position: fixed; inset: 0; }
+canvas { display: block; width: 100% !important; height: 100% !important; }
+
+/* HUD */
+#hud {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  font-size: 28px;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(255,255,255,0.6);
+  letter-spacing: 8px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Overlays */
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.72);
+  color: #fff;
+  z-index: 20;
+  pointer-events: none;
+}
+.overlay h1 {
+  font-size: 56px;
+  font-weight: bold;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  text-shadow: 0 0 20px #4488ff, 0 0 40px #4488ff44;
+}
+.overlay p {
+  font-size: 20px;
+  color: #aaa;
+  letter-spacing: 3px;
+}
+.overlay .controls {
+  margin-top: 28px;
+  color: #666;
+  font-size: 14px;
+  text-align: center;
+  line-height: 1.9;
+  letter-spacing: 1px;
+}
+#overlay-pause h1 {
+  text-shadow: 0 0 20px #ff8844, 0 0 40px #ff884444;
+}
+.overlay-win h1 {
+  color: #44ff88;
+  text-shadow: 0 0 20px #44ff88, 0 0 40px #44ff8844;
+}
+.overlay-lose h1 {
+  text-shadow: 0 0 20px #ff4444, 0 0 40px #ff444444;
+}
+
+/* Settings */
+.settings {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 28px;
+  pointer-events: all;
+}
+.setting-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+.setting-label {
+  width: 110px;
+  color: #666;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-align: right;
+}
+.setting-btn {
+  background: #111;
+  border: 1px solid #444;
+  color: #888;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  padding: 5px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  pointer-events: all;
+  text-transform: uppercase;
+  transition: border-color 0.15s, color 0.15s, box-shadow 0.15s;
+}
+.setting-btn:hover {
+  border-color: #4488ff88;
+  color: #aaa;
+}
+.setting-btn.active {
+  border-color: #4488ff;
+  background: #4488ff;
+  color: #000;
+  box-shadow: 0 0 8px #4488ff44;
+}
+.restart-btn {
+  margin-top: 24px;
+  background: #111;
+  border: 1px solid #ff884466;
+  color: #ff8844;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  letter-spacing: 2px;
+  padding: 7px 22px;
+  border-radius: 12px;
+  cursor: pointer;
+  pointer-events: all;
+  text-transform: uppercase;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.restart-btn:hover {
+  border-color: #ff8844;
+  box-shadow: 0 0 8px #ff884444;
+}
+
+/* Touch controls */
+#pause-btn {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  width: 48px;
+  height: 48px;
+  background: rgba(255,136,68,0.12);
+  border: 1px solid #ff884455;
+  border-radius: 50%;
+  color: #ff8844;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  z-index: 25;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  pointer-events: all;
+  transition: background 0.15s, border-color 0.15s;
+  -webkit-user-select: none;
+  user-select: none;
+}
+#pause-btn:hover, #pause-btn:active {
+  background: rgba(255,136,68,0.28);
+  border-color: #ff8844;
+}
+
+/* Action buttons (start / resume) */
+.action-btn {
+  margin-top: 28px;
+  background: #111;
+  border: 2px solid #4488ff66;
+  color: #4488ff;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  letter-spacing: 3px;
+  padding: 14px 44px;
+  border-radius: 30px;
+  cursor: pointer;
+  pointer-events: all;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+  min-width: 220px;
+  text-align: center;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.action-btn:hover { border-color: #4488ff; box-shadow: 0 0 12px #4488ff44; }
+.action-btn .hold-fill {
+  position: absolute;
+  inset: 0;
+  background: #4488ff1a;
+  transform: scaleX(0);
+  transform-origin: left;
+  border-radius: inherit;
+  pointer-events: none;
+}
+.action-btn.holding .hold-fill {
+  transform: scaleX(1);
+  transition: transform 0.55s linear;
+}
+.action-btn.orange { border-color: #ff884466; color: #ff8844; }
+.action-btn.orange:hover { border-color: #ff8844; box-shadow: 0 0 12px #ff884444; }
+.action-btn.orange .hold-fill { background: #ff88441a; }
+
+/* Enable pointer events on overlays (they're display:none during play) */
+#overlay-start, #overlay-pause { pointer-events: all; }
+
+/* Score flash */
+#score-flash {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 40px;
+  font-weight: bold;
+  color: #fff;
+  text-shadow: 0 0 20px currentColor;
+  pointer-events: none;
+  z-index: 30;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  letter-spacing: 3px;
+  white-space: nowrap;
+}
+#score-flash.player   { color: #4488ff; text-shadow: 0 0 20px #4488ff; }
+#score-flash.opponent { color: #ff4444; text-shadow: 0 0 20px #ff4444; }
+#score-flash.visible  { opacity: 1; }

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -e
+PSQL="psql -U postgres"
+$PSQL -c "CREATE USER games_user    WITH PASSWORD 'strongpassword';"
+$PSQL -c "CREATE USER games_manager WITH PASSWORD 'strongpassword';"
+$PSQL -c "CREATE DATABASE games OWNER postgres;"
+$PSQL -d games -f "$(dirname "$0")/schema.sql"
+$PSQL -d games -f "$(dirname "$0")/seed.sql"
+$PSQL -d games -c "GRANT CONNECT ON DATABASE games TO games_user, games_manager;"
+$PSQL -d games -c "GRANT USAGE ON SCHEMA public TO games_user, games_manager;"
+$PSQL -d games -c "GRANT SELECT ON hangman_words, word_search_words TO games_user;"
+$PSQL -d games -c "GRANT SELECT, INSERT, UPDATE, DELETE ON hangman_sessions TO games_user;"
+$PSQL -d games -c "GRANT SELECT, INSERT, UPDATE, DELETE ON hangman_words, word_search_words TO games_manager;"
+$PSQL -d games -c "GRANT SELECT ON users TO games_manager;"
+$PSQL -d games -c "GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO games_manager;"
