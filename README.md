@@ -2,12 +2,22 @@
 
 A multi-game web application featuring Hangman, Word Search, Typegame, and Pong, with a password-protected admin panel for managing game content. The project is structured to make adding new games straightforward.
 
+![Home screen](docs/screenshots/games-spa_main.png)
+
 ## Games
 
-- **Hangman** — guess the word one letter at a time before the hangman is complete. Words are served in a randomised rotation per player session.
-- **Word Search** — find all hidden words in a 15×15 letter grid. Words are placed in 8 directions; drag to select.
+
+- **Hangman** — guess the word one letter at a time before the hangman is complete. Words are served in a randomised rotation per player session. Toggle hints on or off.
+![Hangman](docs/screenshots/games-spa-hangman.png)
+
+- **Word Search** — find all hidden words in three different sized letter grids. Words are placed in 8 directions; drag to select.
+![Word Search](docs/screenshots/games-spa_wordsearch.png)
+
 - **Typegame** — a typing speed and accuracy game with a difficulty-based leaderboard.
-- **Pong** — the classic arcade game.
+![Typegame](docs/screenshots/games-spa_typegame.png)
+
+- **Pong** — Three.js version, player vs computer.
+![Pong](docs/screenshots/games-spa_pong.png)
 
 ## Tech Stack
 
