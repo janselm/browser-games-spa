@@ -81,7 +81,7 @@ export default class MainScene extends Phaser.Scene {
     this.load.image('sky', 'img/city.jpg');
     // Load selected missile style from settings
     const missileStyle = getMissileStyle();
-    this.load.image('laser', `img/missile_${missileStyle}_full.png`);
+    this.load.image('laser', `img/missile${missileStyle}_inGame.png`);
     this.load.spritesheet('explosion', 'animations/explode/explosion%201.png', {
       frameWidth: 512,
       frameHeight: 512
@@ -664,6 +664,7 @@ export default class MainScene extends Phaser.Scene {
           explosion.play('explode');
           explosion.setScale(0.25);
           explosion.setDepth(100);
+          explosion.once('animationcomplete', () => explosion.destroy());
 
           target.destroy();
           this.addScore(10);
@@ -755,6 +756,7 @@ export default class MainScene extends Phaser.Scene {
         explosion.play('explode');
         explosion.setScale(0.25);
         explosion.setDepth(100);
+        explosion.once('animationcomplete', () => explosion.destroy());
 
         // Award points based on word length (10 points per letter)
         const points = target.word.length * 10;
@@ -828,6 +830,7 @@ export default class MainScene extends Phaser.Scene {
       explosion.play('explode');
       explosion.setScale(0.25);
       explosion.setDepth(100);
+      explosion.once('animationcomplete', () => explosion.destroy());
 
       letterObj.destroy();
     }

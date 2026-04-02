@@ -165,7 +165,7 @@ onUnmounted(() => {
         <div class="carousel">
           <button class="carousel-btn carousel-prev">&lt;</button>
           <div class="carousel-preview">
-            <img id="missile-preview" src="/img/missile_1_full.png" alt="Missile preview" />
+            <img id="missile-preview" src="/img/missile1_Menu.png" alt="Missile preview" />
           </div>
           <button class="carousel-btn carousel-next">&gt;</button>
         </div>

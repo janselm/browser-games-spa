@@ -51,7 +51,7 @@ export const ANIMATION_CONFIG = {
     key: 'explode',
     frameStart: 0,
     frameEnd: 63,
-    duration: 2133,      // Was frameRate: 30. 64 frames / 30fps = 2.133s
+    duration: 350,       // Was 2133 (64 frames / 30fps)
     hideOnComplete: true
   },
   laser: {

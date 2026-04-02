@@ -71,5 +71,5 @@ export function setMissileStyle(style) {
  * @returns {string}
  */
 export function getMissileImagePath(style) {
-  return `/img/missile_${style}_full.png`;
+  return `/img/missile${style}_Menu.png`;
 }
