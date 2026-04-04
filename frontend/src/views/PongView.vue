@@ -64,6 +64,11 @@ onUnmounted(() => {
           <button class="setting-btn active" data-group="points" data-key="7">7</button>
           <button class="setting-btn" data-group="points" data-key="10">10</button>
         </div>
+        <div class="setting-row">
+          <span class="setting-label">Music</span>
+          <button class="setting-btn active" data-group="music" data-key="on">On</button>
+          <button class="setting-btn" data-group="music" data-key="off">Off</button>
+        </div>
       </div>
     </div>
 
@@ -90,6 +95,11 @@ onUnmounted(() => {
           <button class="setting-btn" data-group="points" data-key="5">5</button>
           <button class="setting-btn active" data-group="points" data-key="7">7</button>
           <button class="setting-btn" data-group="points" data-key="10">10</button>
+        </div>
+        <div class="setting-row">
+          <span class="setting-label">Music</span>
+          <button class="setting-btn active" data-group="music" data-key="on">On</button>
+          <button class="setting-btn" data-group="music" data-key="off">Off</button>
         </div>
       </div>
       <button class="restart-btn" id="restart-btn">Restart Game</button>

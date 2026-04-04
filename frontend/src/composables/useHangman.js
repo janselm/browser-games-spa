@@ -15,6 +15,7 @@
  */
 import { ref, computed } from 'vue'
 import { api } from '../services/api.js'
+import { play } from '../services/AudioService.js'
 
 export function useHangman() {
   const currentWord    = ref('')
@@ -69,6 +70,11 @@ export function useHangman() {
     if (isWon.value || isLost.value) return
     if (guessedLetters.value.has(l)) return
     guessedLetters.value = new Set([...guessedLetters.value, l])
+    if (wordLetters.value.includes(l)) {
+      play(isWon.value ? 'win' : 'success')
+    } else {
+      play(isLost.value ? 'lose' : 'incorrect')
+    }
   }
 
   return {

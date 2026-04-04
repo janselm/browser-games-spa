@@ -6,6 +6,12 @@ import MainScene from '../games/typegame/scenes/MainScene.js'
 import { initDifficultySelector, resetDifficultySelector } from '../games/typegame/ui/DifficultySelector.js'
 import { initSettingsUI } from '../games/typegame/ui/SettingsUI.js'
 import { refreshLeaderboardUI } from '../games/typegame/services/LeaderboardService.js'
+import {
+  getMusicEnabled, setMusicEnabled,
+  getMusicVolume, setMusicVolume,
+  getSfxVolume, setSfxVolume,
+  resumeMusic
+} from '../services/AudioService.js'
 import '../games/typegame/style.css'
 
 let game = null
@@ -47,7 +53,39 @@ onMounted(() => {
   refreshLeaderboardUI()
   initDifficultySelector(startGame)
   initSettingsUI()
+  initPauseAudioControls()
 })
+
+function initPauseAudioControls() {
+  const musicOnBtn  = document.getElementById('pause-music-on-btn')
+  const musicOffBtn = document.getElementById('pause-music-off-btn')
+  const musicVolEl  = document.getElementById('pause-music-vol')
+  const sfxVolEl    = document.getElementById('pause-sfx-vol')
+
+  // Initialise to stored values
+  musicVolEl.value = getMusicVolume()
+  sfxVolEl.value   = getSfxVolume()
+
+  function syncMusicButtons() {
+    const on = getMusicEnabled()
+    musicOnBtn.classList.toggle('active', on)
+    musicOffBtn.classList.toggle('active', !on)
+  }
+  syncMusicButtons()
+
+  musicOnBtn.addEventListener('click', () => {
+    setMusicEnabled(true)
+    syncMusicButtons()
+    resumeMusic()
+  })
+  musicOffBtn.addEventListener('click', () => {
+    setMusicEnabled(false)
+    syncMusicButtons()
+  })
+
+  musicVolEl.addEventListener('input', () => setMusicVolume(parseFloat(musicVolEl.value)))
+  sfxVolEl.addEventListener('input',   () => setSfxVolume(parseFloat(sfxVolEl.value)))
+}
 
 onUnmounted(() => {
   if (game) { game.destroy(true); game = null }
@@ -153,11 +191,37 @@ onUnmounted(() => {
         <button id="pause-restart-button">Restart</button>
         <button id="main-menu-button">Main Menu</button>
       </div>
+      <div class="pause-audio-controls">
+        <div class="pause-audio-row">
+          <span class="pause-audio-label">Music</span>
+          <div class="music-toggle">
+            <button id="pause-music-on-btn" class="music-btn">On</button>
+            <button id="pause-music-off-btn" class="music-btn">Off</button>
+          </div>
+        </div>
+        <div class="pause-audio-row">
+          <span class="pause-audio-label">Music Vol</span>
+          <input type="range" id="pause-music-vol" min="0" max="1" step="0.05" class="vol-slider" />
+        </div>
+        <div class="pause-audio-row">
+          <span class="pause-audio-label">SFX Vol</span>
+          <input type="range" id="pause-sfx-vol" min="0" max="1" step="0.05" class="vol-slider" />
+        </div>
+      </div>
       <p class="pause-hint-text">Press [ESC] to resume</p>
     </div>
 
     <div id="settings-overlay" class="overlay hidden">
       <h1>Settings</h1>
+
+      <!-- Music Toggle -->
+      <div class="settings-section">
+        <h2>Music</h2>
+        <div class="music-toggle">
+          <button id="music-on-btn" class="music-btn">On</button>
+          <button id="music-off-btn" class="music-btn">Off</button>
+        </div>
+      </div>
 
       <!-- Missile Selection Carousel -->
       <div class="settings-section">

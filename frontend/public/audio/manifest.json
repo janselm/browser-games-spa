@@ -1,0 +1,19 @@
+{
+  "explosion": ["explosion1.mp3", "explosion2.mp3", "explosion4.mp3", "explosion5.mp3", "explosion8.mp3"],
+  "nuke": ["nuke_explosion.mp3"],
+  "success": [],
+  "incorrect": [],
+  "fail": [],
+  "win": [],
+  "lose": [],
+  "music": [
+    "freesound_community-cliche-techno-or-trance-loop-1-35250.mp3",
+    "idoberg-melodic-techno-loop-408268.mp3",
+    "idoberg-melodic-techno-loop-408268(1).mp3",
+    "idoberg-melodic-techno-melody-v2-248886.mp3",
+    "freesound_community-melodic-dubstep-loop-31245.mp3",
+    "freesound_community-melodic-dubstep-loop-31245(1).mp3",
+    "alien_i_trust-technoid-bassline-by-alien-i-trust-125_bpm-2-244446.mp3",
+    "freesound_community-dubstep-loop-74463.mp3"
+  ]
+}

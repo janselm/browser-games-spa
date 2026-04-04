@@ -10,6 +10,7 @@ import {
   getMissileImagePath,
   MISSILE_COUNT
 } from '../services/SettingsService.js';
+import { getMusicEnabled, setMusicEnabled } from '../../../services/AudioService.js';
 
 let currentMissile = 1;
 
@@ -29,6 +30,28 @@ export function initSettingsUI() {
   // Load saved missile style
   currentMissile = getMissileStyle();
   updateCarousel();
+
+  // Music toggle
+  const musicOnBtn  = document.getElementById('music-on-btn');
+  const musicOffBtn = document.getElementById('music-off-btn');
+
+  function updateMusicButtons() {
+    const enabled = getMusicEnabled();
+    musicOnBtn.classList.toggle('active', enabled);
+    musicOffBtn.classList.toggle('active', !enabled);
+  }
+
+  updateMusicButtons();
+
+  musicOnBtn.addEventListener('click', () => {
+    setMusicEnabled(true);
+    updateMusicButtons();
+  });
+
+  musicOffBtn.addEventListener('click', () => {
+    setMusicEnabled(false);
+    updateMusicButtons();
+  });
 
   // Settings button click
   settingsButton.addEventListener('click', () => {

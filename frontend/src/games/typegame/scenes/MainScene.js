@@ -10,8 +10,10 @@ import {
   DESIGN_WIDTH,
   DESIGN_HEIGHT
 } from '../config/gameConfig.js';
+import { play as playSound, playMusic, pauseMusic, resumeMusic, stopMusic } from '../../../services/AudioService.js';
 
 const nuke_reward = 1000;
+const life_reward = 2000;
 
 /**
  * MainScene
@@ -52,6 +54,8 @@ export default class MainScene extends Phaser.Scene {
     this.hasNuke = false;
     this.nukeThreshold = nuke_reward;
     this.lastNukeScore = 0; // Track when last nuke was earned
+    this.lifeThreshold = life_reward;
+    this.lastLifeScore = 0; // Track when last extra life was earned
     this.nukeSprite = null;
     this.nukeCountdownText = null;
     this.nukeAlertSprite = null;
@@ -166,6 +170,8 @@ export default class MainScene extends Phaser.Scene {
 
     // Setup pause functionality
     this.setupPauseHandlers();
+
+    playMusic();
   }
 
   /**
@@ -367,6 +373,24 @@ export default class MainScene extends Phaser.Scene {
   }
 
   /**
+   * Pulse the newly earned heart to signal extra life awarded
+   */
+  showLifeAlert() {
+    const earnedHeart = this.heartSprites[this.lives - 1];
+    if (!earnedHeart) return;
+
+    this.tweens.add({
+      targets: earnedHeart,
+      scaleX: 1.6,
+      scaleY: 1.6,
+      duration: 150,
+      yoyo: true,
+      repeat: 2,
+      ease: 'Sine.easeInOut'
+    });
+  }
+
+  /**
    * Update lives display - swap textures based on lives remaining
    */
   updateLivesDisplay() {
@@ -441,6 +465,7 @@ export default class MainScene extends Phaser.Scene {
     if (this.isPaused || this.isGameOver) return;
 
     this.isPaused = true;
+    pauseMusic();
     this.scene.pause();
 
     const pauseOverlay = document.getElementById('pause-overlay');
@@ -454,6 +479,7 @@ export default class MainScene extends Phaser.Scene {
     if (!this.isPaused) return;
 
     this.isPaused = false;
+    resumeMusic();
     this.scene.resume();
 
     const pauseOverlay = document.getElementById('pause-overlay');
@@ -489,6 +515,14 @@ export default class MainScene extends Phaser.Scene {
       this.lastNukeScore = Math.floor(currentScore / this.nukeThreshold) * this.nukeThreshold;
       this.updateNukeDisplay();
       this.showNukeAlert();
+    }
+
+    // Check for extra life reward (every 2000 points), max 3 hearts
+    if (this.lives < 3 && currentScore >= this.lastLifeScore + this.lifeThreshold) {
+      this.lives++;
+      this.lastLifeScore = Math.floor(currentScore / this.lifeThreshold) * this.lifeThreshold;
+      this.updateLivesDisplay();
+      this.showLifeAlert();
     }
 
     // Update nuke countdown
@@ -665,6 +699,7 @@ export default class MainScene extends Phaser.Scene {
           explosion.setScale(0.25);
           explosion.setDepth(100);
           explosion.once('animationcomplete', () => explosion.destroy());
+          playSound('explosion');
 
           target.destroy();
           this.addScore(10);
@@ -672,6 +707,7 @@ export default class MainScene extends Phaser.Scene {
       });
     } else {
       // Mistype - penalty
+      playSound('incorrect');
       this.addScore(-10);
       this.triggerCameraShake();
       this.triggerErrorFeedback();
@@ -757,6 +793,7 @@ export default class MainScene extends Phaser.Scene {
         explosion.setScale(0.25);
         explosion.setDepth(100);
         explosion.once('animationcomplete', () => explosion.destroy());
+        playSound('explosion');
 
         // Award points based on word length (10 points per letter)
         const points = target.word.length * 10;
@@ -840,6 +877,8 @@ export default class MainScene extends Phaser.Scene {
       this.addScore(lettersDestroyed * 10);
     }
 
+    playSound('nuke');
+
     // Screen flash effect
     this.cameras.main.flash(300, 255, 200, 100);
 
@@ -885,6 +924,7 @@ export default class MainScene extends Phaser.Scene {
 
         // Decrement lives
         this.lives--;
+        playSound('fail');
         this.updateLivesDisplay();
 
         if (this.lives <= 0) {
@@ -902,6 +942,9 @@ export default class MainScene extends Phaser.Scene {
     // Prevent multiple game over calls
     if (this.isGameOver) return;
     this.isGameOver = true;
+
+    playSound('lose');
+    stopMusic();
 
     // Pause the scene
     this.scene.pause();

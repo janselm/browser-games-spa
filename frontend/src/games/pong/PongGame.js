@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import { play, playMusic, pauseMusic, resumeMusic, stopMusic, getMusicEnabled, setMusicEnabled } from '../../services/AudioService.js'
 
 export function initPongGame() {
   // ─── Constants ────────────────────────────────────────────────────────────
@@ -52,13 +53,20 @@ export function initPongGame() {
   let touchTargetX  = null
 
   // ─── Settings button wiring ───────────────────────────────────────────────
+  // Sync music buttons to stored preference on load
+  const musicKey = getMusicEnabled() ? 'on' : 'off';
+  document.querySelectorAll(`.setting-btn[data-group="music"]`).forEach(b => b.classList.remove('active'));
+  document.querySelectorAll(`.setting-btn[data-group="music"][data-key="${musicKey}"]`).forEach(b => b.classList.add('active'));
+
   document.querySelectorAll('.setting-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const group = btn.dataset.group
       const key   = btn.dataset.key
       document.querySelectorAll(`.setting-btn[data-group="${group}"]`).forEach(b => b.classList.remove('active'))
       document.querySelectorAll(`.setting-btn[data-group="${group}"][data-key="${key}"]`).forEach(b => b.classList.add('active'))
-      if (group === 'difficulty') {
+      if (group === 'music') {
+        setMusicEnabled(key === 'on')
+      } else if (group === 'difficulty') {
         currentDifficulty = DIFFICULTY_PRESETS[key]
       } else if (group === 'speed') {
         currentSpeed = SPEED_PRESETS[key]
@@ -204,7 +212,8 @@ export function initPongGame() {
 
   // ─── Game flow ────────────────────────────────────────────────────────────
   function startOrResume() {
-    if (state === States.WAITING) serveBall()
+    if (state === States.WAITING) { serveBall(); playMusic() }
+    else resumeMusic()
     state = States.PLAYING
     overlayStart.style.display = 'none'
     overlayPause.style.display = 'none'
@@ -213,6 +222,7 @@ export function initPongGame() {
 
   function pause() {
     state = States.PAUSED
+    pauseMusic()
     overlayPause.style.display = 'flex'
     pauseBtn.style.display = 'none'
   }
@@ -235,6 +245,8 @@ export function initPongGame() {
 
   function showGameOver(playerWon) {
     state = States.GAMEOVER
+    stopMusic()
+    play(playerWon ? 'win' : 'lose')
     pauseBtn.style.display = 'none'
     gameoverTitle.textContent = playerWon ? 'YOU WIN!' : 'YOU LOSE'
     overlayGameover.className = `overlay ${playerWon ? 'overlay-win' : 'overlay-lose'}`
@@ -321,6 +333,7 @@ export function initPongGame() {
 
   function scored(playerScored) {
     state = States.SCORED
+    play(playerScored ? 'success' : 'fail')
     if (playerScored) {
       scorePlayer++
       showFlash('You Score!', 'player')
@@ -386,6 +399,7 @@ export function initPongGame() {
   }
 
   function deflectBall(paddle) {
+    play('success')
     const offset = ball.position.x - paddle.position.x
     const norm   = offset / PADDLE_HALF_X
     const angle  = norm * (Math.PI / 4)

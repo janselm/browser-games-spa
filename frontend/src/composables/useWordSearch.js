@@ -20,6 +20,7 @@
  * and 45° diagonal. Non-straight drags are snapped back to the start cell.
  */
 import { ref, computed } from 'vue'
+import { play } from '../services/AudioService.js'
 import { api } from '../services/api.js'
 
 /**
@@ -182,6 +183,7 @@ export function useWordSearch() {
       if (selectedStr === wordStr || selectedStrRev === wordStr) {
         foundWords.value = new Set([...foundWords.value, pw.word])
         foundCells.value = new Set([...foundCells.value, ...pw.cells])
+        play(isWon.value ? 'win' : 'success')
         break
       }
     }
